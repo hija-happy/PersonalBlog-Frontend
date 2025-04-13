@@ -8,17 +8,17 @@ const About = () => {
         
         <div className="space-y-6">
           <p className="text-lg text-black leading-relaxed">
-            Hello! This blog is made by [Your Friend's Name]. I'm passionate about sharing my thoughts, 
-            experiences, and insights with the world.
+          Welcome to the official blog page. This platform serves as a space to share insightful perspectives, thoughtful reflections, and valuable experiences across a range of topics.
+
           </p>
           
           <p className="text-lg text-black leading-relaxed">
-            Through this platform, I aim to create meaningful content that resonates with readers 
-            and provides value in their lives.
+          Our goal is to deliver meaningful and well-crafted content that informs, inspires, and engages readers, while fostering a community built on curiosity and continuous learning.
+
           </p>
           
           <div className="pt-4">
-            <button className="bg-white text-purple-600 font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition duration-300">
+            <button className="bg-purple-500  text-white hover:bg-purple-600 font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition duration-300">
               Connect With Me
             </button>
           </div>
