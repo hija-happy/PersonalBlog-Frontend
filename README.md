@@ -2,8 +2,6 @@
 
 A responsive and modern **Blog UI** built with **React.js**, **Tailwind CSS**, and **Vite**.
 
-![Blog Website Screenshot](https://via.placeholder.com/800x400)
-
 ## 🛠️ Built With
 
 * **React.js** - Frontend library
