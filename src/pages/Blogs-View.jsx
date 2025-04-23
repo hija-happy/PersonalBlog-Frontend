@@ -12,6 +12,7 @@ const Blogs = () => {
       try {
         const response = await axios.get('http://localhost:5000/api/blogs');
         setBlogs(response.data);
+
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch blogs');
@@ -19,7 +20,6 @@ const Blogs = () => {
         console.error('Error fetching blogs:', err);
       }
     };
-
     fetchBlogs();
   }, []);
 
@@ -61,10 +61,10 @@ const Blogs = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-screen overflow-y-auto">
             <div className="relative">
-              {selectedBlog.image ? (
+              {selectedBlog.coverImage && selectedBlog.coverImage.url ? (
                 <div className="h-72 w-full overflow-hidden">
                   <img 
-                    src={`http://localhost:5000/uploads/${selectedBlog.image}`} 
+                    src={selectedBlog.coverImage.url} 
                     alt={selectedBlog.title}
                     className="w-full h-full object-cover"
                   />
@@ -81,7 +81,6 @@ const Blogs = () => {
                 </svg>
               </button>
             </div>
-            
             <div className="p-6">
               <h2 className="text-3xl font-bold mb-4">{selectedBlog.title}</h2>
               <div className="flex items-center mb-6">
@@ -114,9 +113,9 @@ const Blogs = () => {
             onClick={() => handleCardClick(blog)}
           >
             <div className="h-48 overflow-hidden">
-              {blog.image ? (
+              {blog.coverImage && blog.coverImage.url ? (
                 <img 
-                  src={`http://localhost:5000/uploads/${blog.image}`} 
+                  src={blog.coverImage.url} 
                   alt={blog.title}
                   className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                 />

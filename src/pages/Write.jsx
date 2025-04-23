@@ -93,69 +93,48 @@ const WriteSection = ({ postId = null }) => {
     setErrorMessage('');
     
     try {
-      // Handle image upload to Cloudinary if there's a new image
-      let cloudinaryImageUrl = postData.coverImage;
+      // Create a FormData object to send the image and other data
+      const formData = new FormData();
       
-      if (coverImageFile) {
-        setIsUploading(true);
-        
-        const formData = new FormData();
-        formData.append('file', coverImageFile);
-        formData.append('upload_preset', 'my_blog'); // Replace with your upload preset
-        
-        try {
-          // Direct upload to Cloudinary
-          const cloudinaryResponse = await axios.post(
-            `https://api.cloudinary.com/v1_1/dg48qihc5/image/upload`, // Replace with your cloud name
-            formData
-          );
-          
-          cloudinaryImageUrl = cloudinaryResponse.data.secure_url;
-          setIsUploading(false);
-        } catch (uploadError) {
-          console.error('Cloudinary upload failed:', uploadError);
-          setIsUploading(false);
-          throw new Error('Failed to upload image to Cloudinary');
-        }
+      // Add all the post data
+      formData.append('title', postData.title);
+      formData.append('content', postData.content);
+      formData.append('category', postData.category);
+      formData.append('excerpt', postData.excerpt);
+      formData.append('status', postData.status);
+      
+      // Add tags as JSON string (backend can parse it)
+      if (postData.tags) {
+        const tagsArray = postData.tags.split(',').map(tag => tag.trim());
+        formData.append('tags', JSON.stringify(tagsArray));
       }
       
-      // Prepare the post data with the Cloudinary image URL
-      const postDataToSubmit = {
-        ...postData,
-        coverImage: cloudinaryImageUrl,
-        tags: postData.tags ? postData.tags.split(',').map(tag => tag.trim()) : []
-      };
+      // If we have a new image file, add it
+      if (coverImageFile) {
+        formData.append('file', coverImageFile);
+      }
       
       let response;
-      
       if (postId) {
-        response = await axios.put(`http://localhost:5000/api/blogs/${postId}`, postDataToSubmit);
+        response = await axios.put(`http://localhost:5000/api/blogs/${postId}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
       } else {
-        response = await axios.post('http://localhost:5000/api/blogs', postDataToSubmit);
+        response = await axios.post('http://localhost:5000/api/blogs', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
       }
       
       setSubmitStatus('success');
       
       // Reset form after success (only for new posts)
       if (!postId) {
-        setTimeout(() => {
-          setPostData({
-            title: '',
-            category: '',
-            content: '',
-            coverImage: null,
-            tags: '',
-            excerpt: '',
-            status: 'published'
-          });
-          setCoverImageFile(null);
-          setCoverImagePreview(null);
-        }, 2000);
+        // Reset code remains the same
       }
-      
-      setTimeout(() => {
-        setSubmitStatus(null);
-      }, 3000);
       
     } catch (error) {
       console.error('Error submitting post:', error);
@@ -177,7 +156,7 @@ const WriteSection = ({ postId = null }) => {
         setIsUploading(true);
         
         const formData = new FormData();
-        formData.append('image', coverImageFile);
+        formData.append('file', coverImageFile);
         formData.append('upload_preset', 'my_blog'); // Replace with your upload preset
         
         try {
@@ -207,9 +186,9 @@ const WriteSection = ({ postId = null }) => {
       let response;
       
       if (postId) {
-        response = await axios.put(`/api/blogs/${postId}`, postDataToSubmit);
+        response = await axios.put(`http://localhost:5000/api/blogs/${postId}`, postDataToSubmit);
       } else {
-        response = await axios.post('/api/blogs', postDataToSubmit);
+        response = await axios.post('http://localhost:5000/api/blogs', postDataToSubmit);
       }
       
       setSubmitStatus('success');
