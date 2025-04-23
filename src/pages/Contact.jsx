@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import emailjs from 'emailjs-com';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const ContactPage = () => {
   });
   
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,21 +21,46 @@ const ContactPage = () => {
     }));
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
     
-    // Reset form after submission
-    setTimeout(() => {
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
-      setSubmitted(false);
-    }, 3000);
+    try {
+      // Using EmailJS to send email
+      const templateParams = {
+        from_name: formData.name,
+        reply_to: formData.email,
+        subject: formData.subject,
+        message: formData.message
+      };
+      
+      await emailjs.send(
+        'service_gcezvw6', // Replace with your EmailJS service ID
+        'template_ixzmhm9', // Replace with your EmailJS template ID
+        templateParams,
+        'ZOKTUR2jJRYbgT4qP' // Replace with your EmailJS user ID
+      );
+      
+      console.log('Email sent successfully');
+      setSubmitted(true);
+      
+      // Reset form after submission
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+        setSubmitted(false);
+      }, 5000);
+    } catch (err) {
+      console.error('Failed to send email:', err);
+      setError('Failed to send your message. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
   
   return (
@@ -188,11 +216,27 @@ const ContactPage = () => {
                   <div>
                     <button
                       type="submit"
-                      className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      disabled={loading}
+                      className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-70"
                     >
-                      Send Message
+                      {loading ? 'Sending...' : 'Send Message'}
                     </button>
                   </div>
+                  
+                  {error && (
+                    <div className="rounded-md bg-red-50 p-4 mt-4">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <svg className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div className="ml-3">
+                          <h3 className="text-sm font-medium text-red-800">{error}</h3>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </form>
               )}
             </div>

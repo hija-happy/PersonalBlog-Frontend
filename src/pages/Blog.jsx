@@ -6,71 +6,30 @@ const BlogPage = () => {
   // Mock categories and posts data
   const categories = ['All', 'Technology', 'Design', 'Development', 'Lifestyle'];
   
-  const posts = [
-    {
-      id: 1,
-      title: "How to Master React Hooks in 2025",
-      excerpt: "Learn the essential hooks and patterns that every React developer should know this year.",
-      category: "Development",
-      date: "April 10, 2025",
-      readTime: "6 min read",
-      image: "/api/placeholder/800/500",
-      featured: true
-    },
-    {
-      id: 2,
-      title: "10 UI Design Trends That Will Dominate This Year",
-      excerpt: "Explore the cutting-edge design patterns that are reshaping the digital landscape.",
-      category: "Design",
-      date: "April 8, 2025",
-      readTime: "8 min read",
-      image: "/api/placeholder/800/500"
-    },
-    {
-      id: 3,
-      title: "The Future of AI in Web Development",
-      excerpt: "How artificial intelligence is changing the way we build and interact with websites.",
-      category: "Technology",
-      date: "April 5, 2025",
-      readTime: "10 min read",
-      image: "/api/placeholder/800/500"
-    },
-    {
-      id: 4,
-      title: "Building Accessible Websites: A Complete Guide",
-      excerpt: "Learn how to make your websites usable by everyone, regardless of abilities.",
-      category: "Development",
-      date: "April 2, 2025",
-      readTime: "12 min read",
-      image: "/api/placeholder/800/500"
-    },
-    {
-      id: 5,
-      title: "How I Built a Profitable Blog from Scratch",
-      excerpt: "My journey from zero to 100k monthly visitors and how you can do it too.",
-      category: "Lifestyle",
-      date: "March 29, 2025",
-      readTime: "15 min read",
-      image: "/api/placeholder/800/500"
-    },
-    {
-      id: 6,
-      title: "JavaScript Performance Tips for 2025",
-      excerpt: "Optimize your JavaScript code with these modern best practices.",
-      category: "Development",
-      date: "March 25, 2025",
-      readTime: "7 min read",
-      image: "/api/placeholder/800/500"
-    }
-  ];
   
-  // Filter posts by selected category
-  const filteredPosts = selectedCategory === 'All' 
-    ? posts 
-    : posts.filter(post => post.category === selectedCategory);
-  
-  // Get featured post
-  const featuredPost = posts.find(post => post.featured);
+  useEffect(() => {
+    fetch('http://localhost:5000/api/blogs')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch blogs');
+        return res.json();
+      })
+      .then((data) => {
+        setPosts(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError(err.message);
+      });
+  }, []);
+
+  const filteredPosts =
+    selectedCategory === 'All'
+      ? posts
+      : posts.filter((post) => post.category === selectedCategory);
+
+  const featuredPost = posts.find((post) => post.featured);
+
+  if (error) return <p className="text-red-500 p-4">Error: {error}</p>;
   
   return (
     <div className="min-h-screen bg-gray-50">
