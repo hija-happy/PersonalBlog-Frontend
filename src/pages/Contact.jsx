@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
+import Navbar from '../components/Navbar';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({

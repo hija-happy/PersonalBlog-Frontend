@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -14,9 +14,12 @@ import { LoginPage } from './pages/Login';
 import { RegisterPage } from './pages/Register';
 
 function App() {
+  const location = useLocation();
+  const hideLayout = location.pathname === "/login" || location.pathname === "/register";
+
   return (
     <>
-      <Navbar />
+      {!hideLayout && <Navbar />}
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -30,10 +33,9 @@ function App() {
           <Route path="/blog" element={<BlogPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          
         </Routes>
       </main>
-      <Footer />
+      {!hideLayout && <Footer />}
     </>
   );
 }

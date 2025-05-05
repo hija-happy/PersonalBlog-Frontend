@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const About = () => {
+  const navigate = useNavigate();
   return (
     <section className="bg-gradient-to-r from-purple-600 to-blue-500 min-h-screen flex items-center justify-center p-8">
       <div className="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-8 max-w-2xl w-full shadow-xl border border-white border-opacity-20">
@@ -18,7 +20,7 @@ const About = () => {
           </p>
           
           <div className="pt-4">
-            <button className="bg-purple-500  text-white hover:bg-purple-600 font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition duration-300">
+            <button onClick={()=> navigate("/contact")} className="bg-purple-500  text-white hover:bg-purple-600 font-semibold py-2 px-6 rounded-lg hover:bg-opacity-90 transition duration-300">
               Connect With Me
             </button>
           </div>

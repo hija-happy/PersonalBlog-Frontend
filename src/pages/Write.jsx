@@ -9,7 +9,8 @@ const WriteSection = ({ postId = null }) => {
     coverImage: null,
     tags: '',
     excerpt: '',
-    status: 'published'
+    status: 'published',
+    author: '' // Added author field
   });
   
   const [coverImageFile, setCoverImageFile] = useState(null);
@@ -102,6 +103,7 @@ const WriteSection = ({ postId = null }) => {
       formData.append('category', postData.category);
       formData.append('excerpt', postData.excerpt);
       formData.append('status', postData.status);
+      formData.append('author', postData.author); // Added author field
       
       // Add tags as JSON string (backend can parse it)
       if (postData.tags) {
@@ -318,7 +320,7 @@ const WriteSection = ({ postId = null }) => {
                   alt="Author" 
                 />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Your Name</p>
+                  <p className="text-sm font-medium text-gray-900">{postData.author || 'Author Name'}</p>
                   <p>
                     {new Date().toLocaleDateString('en-US', { 
                       year: 'numeric', 
@@ -407,6 +409,8 @@ const WriteSection = ({ postId = null }) => {
                   </div>
                 )}
               </div>
+
+
               
               {/* Post Title and Category */}
               <div className="p-6">
@@ -417,7 +421,7 @@ const WriteSection = ({ postId = null }) => {
                   value={postData.title}
                   onChange={handleChange}
                   placeholder="Post Title"
-                  className="block w-full border-0 border-b border-transparent bg-gray-50 focus:border-purple-600 focus:ring-0 text-3xl font-bold mb-4 py-3 px-4"
+                  className="block w-full border border-b border-gray-400 rounded-md shadow-sm bg-gray-50 focus:border-purple-600 focus:ring-0 text-3xl font-bold mb-4 py-3 px-4"
                 />
                 
                 <div className="flex flex-wrap gap-4 mb-6">
@@ -455,6 +459,22 @@ const WriteSection = ({ postId = null }) => {
                       className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                     />
                   </div>
+                </div>
+                
+                {/* Author Field */}
+                <div className="pb-6">
+                  <label htmlFor="author" className="block text-sm font-medium text-gray-700">
+                    Author Name
+                  </label>
+                  <input
+                    type="text"
+                    name="author"
+                    id="author"
+                    value={postData.author}
+                    onChange={handleChange}
+                    placeholder="Your name"
+                    className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                  />
                 </div>
                 
                 <div className="mb-6">
